@@ -43,11 +43,6 @@ input{width:100%;text-align:center;font-size:1.35rem;font-weight:700;padding:0 8
 <div class="result"><span>Frische Hefe</span><strong id="yeast"></strong></div>
 </section>
 
-<section class="panel note">
-Grundlage: <strong>6 Pizzen = 1.000 g Mehl, 620 ml Wasser, 30 g Salz und 1,5 g frische Hefe.</strong><br><br>
-Trockenhefe: ca. <strong id="dry" class="accent"></strong>.
-</section>
-
 <div class="install"><strong>Android:</strong> In Chrome öffnen → Menü ⋮ → <strong>„Zum Startbildschirm hinzufügen“</strong> oder <strong>„App installieren“</strong>.</div>
 
 <section class="panel prep">
@@ -66,12 +61,12 @@ Trockenhefe: ca. <strong id="dry" class="accent"></strong>.
 
 <script>
 (function(){
-const c=document.getElementById('count'),f=document.getElementById('flour'),w=document.getElementById('water'),s=document.getElementById('salt'),y=document.getElementById('yeast'),d=document.getElementById('dry');
+const c=document.getElementById('count'),f=document.getElementById('flour'),w=document.getElementById('water'),s=document.getElementById('salt'),y=document.getElementById('yeast');
 const de=(n,k=0)=>n.toLocaleString('de-DE',{minimumFractionDigits:k,maximumFractionDigits:k});
 function calc(){
  let n=Math.round(Number(c.value)); if(!Number.isFinite(n)||n<1)n=1;if(n>50)n=50;c.value=n;
  let fv=1000/6*n,wv=620/6*n,sv=30/6*n,yv=1.5/6*n;
- f.textContent=de(Math.round(fv))+' g';w.textContent=de(Math.round(wv))+' ml';s.textContent=de(Math.round(sv))+' g';y.textContent=de(yv,2)+' g';d.textContent=de(yv/3,2)+' g';
+ f.textContent=de(Math.round(fv))+' g';w.textContent=de(Math.round(wv))+' ml';s.textContent=de(Math.round(sv))+' g';y.textContent=de(yv,2)+' g';
 }
 document.getElementById('minus').addEventListener('click',()=>{c.value=Math.max(1,Number(c.value||1)-1);calc()});
 document.getElementById('plus').addEventListener('click',()=>{c.value=Math.min(50,Number(c.value||1)+1);calc()});
