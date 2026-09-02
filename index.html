@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#d99a00">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Pizzateig-Rechner</title>
+
+<style>
+:root{--bg:#f7f4ef;--card:#fff;--text:#1f1f1f;--muted:#6b6b6b;--accent:#d99a00;--border:#e7e0d6}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+main{max-width:560px;margin:auto;padding:24px 16px 36px}h1{font-size:2rem;line-height:1.1;margin:6px 0 8px}.sub{color:var(--muted);margin-bottom:22px}
+.panel,.result{background:var(--card);border:1px solid var(--border);border-radius:18px}.panel{padding:18px;margin-bottom:14px}
+label{display:block;font-weight:700;margin-bottom:10px}.counter{display:grid;grid-template-columns:52px 1fr 52px;gap:10px}
+button,input{min-height:52px;border-radius:14px;border:1px solid var(--border);background:#fff}button{font-size:1.6rem;font-weight:700}
+input{width:100%;text-align:center;font-size:1.35rem;font-weight:700;padding:0 8px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.result{padding:16px}.result span{display:block;color:var(--muted);font-size:.9rem}.result strong{display:block;font-size:1.6rem;margin-top:4px}
+.note{font-size:.92rem;line-height:1.5;color:var(--muted)}.accent{color:var(--accent)}
+.install{margin-top:16px;padding:14px 16px;background:#fff7df;border:1px solid #efd690;border-radius:16px;font-size:.9rem;line-height:1.45}
+@media(max-width:380px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<h1>🍕 Pizzateig-Rechner</h1>
+<div class="sub">Neapolitanischer Teig · 62 % Hydration</div>
+
+<section class="panel">
+<label for="count">Wie viele Pizzen?</label>
+<div class="counter">
+<button id="minus" type="button" aria-label="Eine Pizza weniger">−</button>
+<input id="count" type="number" min="1" max="50" step="1" value="5" inputmode="numeric">
+<button id="plus" type="button" aria-label="Eine Pizza mehr">+</button>
+</div>
+</section>
+
+<section class="grid" aria-live="polite">
+<div class="result"><span>Mehl Typ 00</span><strong id="flour"></strong></div>
+<div class="result"><span>Wasser</span><strong id="water"></strong></div>
+<div class="result"><span>Meersalz</span><strong id="salt"></strong></div>
+<div class="result"><span>Frische Hefe</span><strong id="yeast"></strong></div>
+</section>
+
+<section class="panel note">
+Grundlage: <strong>6 Pizzen = 1.000 g Mehl, 620 ml Wasser, 30 g Salz und 1,5 g frische Hefe.</strong><br><br>
+Trockenhefe: ca. <strong id="dry" class="accent"></strong>.
+</section>
+
+<div class="install"><strong>Android:</strong> In Chrome öffnen → Menü ⋮ → <strong>„Zum Startbildschirm hinzufügen“</strong> oder <strong>„App installieren“</strong>.</div>
+</main>
+
+<script>
+(function(){
+const c=document.getElementById('count'),f=document.getElementById('flour'),w=document.getElementById('water'),s=document.getElementById('salt'),y=document.getElementById('yeast'),d=document.getElementById('dry');
+const de=(n,k=0)=>n.toLocaleString('de-DE',{minimumFractionDigits:k,maximumFractionDigits:k});
+function calc(){
+ let n=Math.round(Number(c.value)); if(!Number.isFinite(n)||n<1)n=1;if(n>50)n=50;c.value=n;
+ let fv=1000/6*n,wv=620/6*n,sv=30/6*n,yv=1.5/6*n;
+ f.textContent=de(Math.round(fv))+' g';w.textContent=de(Math.round(wv))+' ml';s.textContent=de(Math.round(sv))+' g';y.textContent=de(yv,2)+' g';d.textContent=de(yv/3,2)+' g';
+}
+document.getElementById('minus').addEventListener('click',()=>{c.value=Math.max(1,Number(c.value||1)-1);calc()});
+document.getElementById('plus').addEventListener('click',()=>{c.value=Math.min(50,Number(c.value||1)+1);calc()});
+c.addEventListener('input',calc);c.addEventListener('change',calc);calc();
+if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
+})();
+</script>
+</body>
+</html>
